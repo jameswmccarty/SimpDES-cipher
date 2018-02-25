@@ -7,6 +7,8 @@ This standard uses a 10-bit key, and an 8-bit block size.  This is an implementa
 
 A sample bash script to trial keys for a known plaintext attack (KPA) is provided to demonstrate the process.  The key size is small enough to be able to brute force a solution almost instantly.
 
+There is a sample bash script and utility C program to search for candidate keys using character frequency analysis.  The utility C program generates a histogram of ASCII characters A-Z and a-z and compares frequency against known distribution in the English language.  The bash script evaluates keys based on the return value of the utility program.
+
 # Background
 For information on the design of Simple DES, I would recommend checking out the below links:
 
@@ -21,7 +23,11 @@ o Makefile
 
 o simpDES.c
 
+o check_lang.c
+
 o brute_force.sh
+
+o char_freq.sh
 
 Compile the project with: `make`
 
@@ -35,5 +41,10 @@ To execute the known plaintext attack, run: `./brute_force.sh ciphertextfile "Sa
 
 i.e.:  
 `./brute_force.sh secretfile.enc "Lorem ipsum dolor situr adipiscing elit."`
+
+To execute the ciphertext only attack, run: `./char_freq.sh ciphertextfile`
+
+i.e.:  
+`./char_freq.sh LICENSE.enc`
 
 

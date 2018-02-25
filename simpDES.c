@@ -23,6 +23,11 @@ const unsigned char S1[4][4] = {
 	{2,1,0,3}
 };
 
+/* Round keys shared by all encrypt or
+ * decrypt steps. */
+unsigned char k1 = 0x00;
+unsigned char k2 = 0x00;
+
 /* IP -- Initial Permutation *
  *
  * Permutate the 8-bit input vector
@@ -153,13 +158,13 @@ unsigned char SW(char input) {
  * Provided a 10-bit input key, populate the
  * 8-bit keys at k1 and k2 by performing
  * the 2 key expansion rounds. */
-void key_exp(int key, unsigned char *k1, unsigned char *k2) {
+void key_exp(int key) {
 	int tmp;
 	tmp = P10(key);
 	tmp = LS(HI_5(tmp), 1) << 5 | LS(LO_5(tmp), 1);
-	*k1  = P8(tmp);
+	k1  = P8(tmp);
 	tmp = LS(HI_5(tmp), 2) << 5 | LS(LO_5(tmp), 2);
-	*k2  = P8(tmp);
+	k2  = P8(tmp);
 }
 
 /* P4 -- Permutation *
@@ -239,9 +244,6 @@ unsigned char f_k(char input, char k) {
  * 8-bit cipher text.
  */
 unsigned char encrypt(unsigned char plain, int key) {
-	unsigned char k1, k2; /* round keys */
-	/* Computer Key Expansion first */
-	key_exp(key, &k1, &k2);
 	/* Apply initial permutation to plain text */
 	plain = IP(plain);
 	/* apply first round function */
@@ -258,9 +260,6 @@ unsigned char encrypt(unsigned char plain, int key) {
  * of encryption process above.
  */
 unsigned char decrypt(unsigned char cipher, int key) {
-	unsigned char k1, k2;
-	/* Computer Key Expansion first */
-	key_exp(key, &k1, &k2);
 	/* Apply initial permutation to cipher text */
 	cipher = IP(cipher);
 	/* apply first round function */
@@ -319,6 +318,9 @@ int main(int argc, char **argv) {
 	
 	key = strtol(argv[4],NULL,16); /* read key as a hex value */
 	key &= KEYMASK; /* retain 10-bits only */
+
+	/* Computer Key Expansion first */
+	key_exp(key);
 
 	if(enc_flag) {
 		while(1) {

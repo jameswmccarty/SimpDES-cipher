@@ -31,7 +31,7 @@ i.e.:
 `./simpDES -e secret_stuff.pdf encrypted_secret_stuff.enc 0x0282`  
 `./simpDES -d encrypted_secret_stuff.enc secret_stuff.pdf 0x0282`  
 
-To execute the known plaintext attack, run: `./brute_force.sh ciphertextfile "Sample of Known plaintext."
+To execute the known plaintext attack, run: `./brute_force.sh ciphertextfile "Sample of Known plaintext."`
 
 i.e.:  
 `./brute_force.sh secretfile.enc "Lorem ipsum dolor situr adipiscing elit."`
